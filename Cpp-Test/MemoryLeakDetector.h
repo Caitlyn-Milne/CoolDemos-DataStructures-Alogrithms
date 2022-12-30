@@ -6,7 +6,7 @@ using namespace std;
 using namespace testing;
 namespace testing
 {
-	class memory_leak_detector : public EmptyTestEventListener
+	class MemoryLeakDetector final : public EmptyTestEventListener
 	{
 #ifdef _DEBUG
 	public:

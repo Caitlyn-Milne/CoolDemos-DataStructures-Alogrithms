@@ -7,13 +7,14 @@ using namespace testing;
 
 namespace testing
 {
-	void memory_leak_detector::OnTestStart(const TestInfo&)
+	void MemoryLeakDetector::OnTestStart(const TestInfo&)
 	{
 		_CrtMemCheckpoint(&_memState);
 	}
 
-	void memory_leak_detector::OnTestEnd(const TestInfo& test_info)
+	void MemoryLeakDetector::OnTestEnd(const TestInfo& test_info)
 	{
+		auto p = test_info.type_param();
 		if (test_info.result()->Failed()) return;
 		_CrtMemState now, dif;
 		_CrtMemCheckpoint(&now);
@@ -28,6 +29,6 @@ namespace testing
 GTEST_API_ int main(int argc, char** argv)
 {
 	InitGoogleTest(&argc, argv);
-	UnitTest::GetInstance()->listeners().Append(new memory_leak_detector());
+	UnitTest::GetInstance()->listeners().Append(new MemoryLeakDetector());
 	return RUN_ALL_TESTS();
 }

@@ -1,110 +1,66 @@
 #pragma once
+#include <iostream>
+#include "Interfaces.h"
 namespace ds
 {
-	template<typename Type>
-	class IStack
-	{
-	public:
-		virtual void push(Type&) = 0;
-		virtual Type& pop() = 0;
-		virtual Type& peek_last() = 0;
-	};
-
-	template<typename Type>
-	class IQueue
-	{
-	public:
-		virtual void offer(Type&) = 0;
-		virtual Type& poll() = 0;
-		virtual Type& peek_first() = 0;
-	};
-
-	template<typename Type>
-	class IDeque : public IStack<Type>, public IQueue<Type>
-	{
-	public:
-		virtual void add_last(Type&) = 0;
-		virtual Type& remove_last() = 0;
-		Type& peek_last() override = 0;
-
-		virtual void add_first(Type&) = 0;
-		virtual Type& remove_first() = 0;
-		Type& peek_first() override = 0;
-
-		void offer(Type&) final;
-		Type& poll() final;
-		void push(Type&) final;
-		Type& pop() final;
-	};
-
 	template<typename Type>
 	class MyLinkedList final : public IDeque<Type>
 	{
 		class Node
 		{
 		private:
-			Type& value_;
+			const Type& value_;
 		public:
 			Node* next_ = nullptr;
 			Node* previous_ = nullptr;
-			Type& get_value();
-			explicit Node(Type& type);
+			const Type& get_value();
+			explicit Node(const Type& type);
+
+			~Node();
 		};
 
 	private:
 		Node* head_ = nullptr;
 		Node* tail_ = nullptr;
+		int count_ = 0;
 	public:
-		void add_last(Type&) override;
-		Type& remove_last() override;
-		Type& peek_last() override;
+		void add_last(const Type&) override;
+		const Type& remove_last() override;
+		const Type& peek_last() override;
 
-		void add_first(Type&) override;
-		Type& remove_first() override;
-		Type& peek_first() override;
+		void add_first(const Type&) override;
+		const Type& remove_first() override;
+		const Type& peek_first() override;
 
-		~MyLinkedList();
+		int get_count() override;
+
+		~MyLinkedList() override;
 
 	private:
 		void validate_non_empty();
 	};
 
 	template <typename Type>
-	void IDeque<Type>::offer(Type& item)
+	MyLinkedList<Type>::Node::Node(const Type& type) : value_(type) {}
+
+	template <typename Type>
+	MyLinkedList<Type>::Node::~Node()
 	{
-		add_last(item);
+		std::cout << "node destructor";
+		next_ = nullptr;
+		previous_ = nullptr;
 	}
 
 	template <typename Type>
-	Type& IDeque<Type>::poll()
-	{
-		return remove_first();
-	}
-
-	template <typename Type>
-	void IDeque<Type>::push(Type& item)
-	{
-		add_last(item);
-	}
-
-	template <typename Type>
-	Type& IDeque<Type>::pop()
-	{
-		return remove_last();
-	}
-
-	template <typename Type>
-	MyLinkedList<Type>::Node::Node(Type& type) : value_(type) {}
-
-	template <typename Type>
-	Type& MyLinkedList<Type>::Node::get_value()
+	const Type& MyLinkedList<Type>::Node::get_value()
 	{
 		return value_;
 	}
 
 	template <typename Type>
-	void MyLinkedList<Type>::add_last(Type& item)
+	void MyLinkedList<Type>::add_last(const Type& item)
 	{
+		++count_;
 		Node* node = new Node(item);
 		if (head_ == nullptr)
 		{
@@ -119,9 +75,10 @@ namespace ds
 	}
 
 	template <typename Type>
-	Type& MyLinkedList<Type>::remove_last()
+	const Type& MyLinkedList<Type>::remove_last()
 	{
 		validate_non_empty();
+		--count_;
 		auto prev = tail_->previous_;
 		if (prev != nullptr)
 		{
@@ -131,22 +88,23 @@ namespace ds
 		{
 			head_ = nullptr;
 		}
-		auto result = tail_->get_value();
+		const Type& result = tail_->get_value();
 		delete tail_;
 		tail_ = prev;
 		return result;
 	}
 
 	template <typename Type>
-	Type& MyLinkedList<Type>::peek_last()
+	const Type& MyLinkedList<Type>::peek_last()
 	{
 		validate_non_empty();
 		return tail_->get_value();
 	}
 
 	template <typename Type>
-	void MyLinkedList<Type>::add_first(Type& item)
+	void MyLinkedList<Type>::add_first(const Type& item)
 	{
+		++count_;
 		Node* node = new Node(item);
 		if (tail_ == nullptr)
 		{
@@ -161,9 +119,10 @@ namespace ds
 	}
 
 	template <typename Type>
-	Type& MyLinkedList<Type>::remove_first()
+	const Type& MyLinkedList<Type>::remove_first()
 	{
 		validate_non_empty();
+		--count_;
 		auto next = head_->next_;
 		if (next != nullptr)
 		{
@@ -173,24 +132,37 @@ namespace ds
 		{
 			tail_ = nullptr;
 		}
-		auto result = head_->get_value();
+		const Type& result = head_->get_value();
 		delete head_;
 		head_ = next;
 		return result;
 	}
 
 	template <typename Type>
-	Type& MyLinkedList<Type>::peek_first()
+	const Type& MyLinkedList<Type>::peek_first()
 	{
 		validate_non_empty();
 		return head_->get_value();
 	}
 
 	template <typename Type>
+	int MyLinkedList<Type>::get_count()
+	{
+		return count_;
+	}
+
+	template <typename Type>
 	MyLinkedList<Type>::~MyLinkedList()
 	{
-		delete head_;
-		delete tail_;
+		Node* node = head_;
+		while(node != nullptr)
+		{
+			Node* next = node->next_;
+			delete node;
+			node = next;
+		}
+		tail_ = nullptr;
+		head_ = nullptr;
 	}
 
 	template <typename Type>
@@ -201,6 +173,4 @@ namespace ds
 			throw std::exception("data structure is empty");
 		}
 	}
-
-	template class MyLinkedList<int>;
 };
