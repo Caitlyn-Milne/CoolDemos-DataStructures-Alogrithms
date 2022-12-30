@@ -9,7 +9,8 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include "Interfaces.h"
 #include "MyDynamicList.h"
-
+#include "MyLinkedList.h"
 #endif //PCH_H
 

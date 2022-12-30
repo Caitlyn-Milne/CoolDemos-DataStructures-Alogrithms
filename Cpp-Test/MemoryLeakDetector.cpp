@@ -27,10 +27,7 @@ namespace testing
 
 GTEST_API_ int main(int argc, char** argv)
 {
-	cout << "Running main() from gtest_mld_main.cpp" << endl;
-
 	InitGoogleTest(&argc, argv);
 	UnitTest::GetInstance()->listeners().Append(new memory_leak_detector());
-
 	return RUN_ALL_TESTS();
 }

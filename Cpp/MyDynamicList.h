@@ -1,38 +1,37 @@
 #pragma once
-#include <array>
 #include <functional>
 
 namespace ds
 {
-	class my_dynamic_list
+	class MyDynamicList
 	{
-		class iterator
+		class Iterator
 		{
 		public:
-			iterator(int* pointer);
+			Iterator(int* pointer);
 
-			iterator& operator++(); //prefix
-			iterator operator++(int); //postfix
-			iterator& operator--(); //prefix
-			iterator operator--(int); //postfix
+			Iterator& operator++(); //prefix
+			Iterator operator++(int); //postfix
+			Iterator& operator--(); //prefix
+			Iterator operator--(int); //postfix
 
 			int operator*() const;
 			int* operator->() const;
 
 			explicit operator int*() const;
 
-			bool operator==(const iterator& other) const;
-			bool operator!=(const iterator& other) const;
+			bool operator==(const Iterator& other) const;
+			bool operator!=(const Iterator& other) const;
 
 		private:
 			int* _pointer;
 		};
 
 	public:
-		my_dynamic_list(int array[], int size_of_array);
-		my_dynamic_list();
-		my_dynamic_list(my_dynamic_list& copy);
-		my_dynamic_list(int capacity);
+		MyDynamicList(int array[], int size_of_array);
+		MyDynamicList();
+		MyDynamicList(MyDynamicList& copy);
+		MyDynamicList(int capacity);
 
 		void add(int value);
 		void remove_at(int);
@@ -46,20 +45,23 @@ namespace ds
 		int get_at(int index) const;
 		void set_at(int index, int value) const;
 
-		iterator begin();
-		iterator end();
+		Iterator begin();
+		Iterator end();
 
-		~my_dynamic_list();
+		template<typename t> void test();
+
+		~MyDynamicList();
 
 	private:
-		void ensure_capacity(int new_capacity);
+		void ensure_capacity();
 		inline void validate_in_bounds(int index) const;
 
 	private:
-		int* _array;
-		int _capacity;
-		int _count = 0;
+		int* array_;
+		int capacity_;
+		int count_ = 0;
 	};
+
 
 }
 

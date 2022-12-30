@@ -6,6 +6,7 @@
     <ClCompile Include="MemoryLeakDetector.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="IStackTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

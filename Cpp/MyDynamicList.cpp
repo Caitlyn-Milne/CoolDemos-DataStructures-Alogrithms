@@ -4,99 +4,100 @@ namespace ds
 {
 	constexpr int default_capacity = 4;
 
-	my_dynamic_list::iterator::iterator(int* pointer): _pointer(pointer) { }
+	MyDynamicList::Iterator::Iterator(int* pointer): _pointer(pointer) { }
 
 	//iterator
-	my_dynamic_list::iterator& my_dynamic_list::iterator::operator++()
+	MyDynamicList::Iterator& MyDynamicList::Iterator::operator++()
 	{
 		_pointer++;
 		return *this;
 	}
 
-	my_dynamic_list::iterator my_dynamic_list::iterator::operator++(int)
+	MyDynamicList::Iterator MyDynamicList::Iterator::operator++(int)
 	{
-		const iterator self = *this;
+		const Iterator self = *this;
 		++(*this);
 		return self;
 	}
 
-	my_dynamic_list::iterator& my_dynamic_list::iterator::operator--()
+	MyDynamicList::Iterator& MyDynamicList::Iterator::operator--()
 	{
 		_pointer--;
 		return *this;
 	}
 
-	my_dynamic_list::iterator my_dynamic_list::iterator::operator--(int)
+	MyDynamicList::Iterator MyDynamicList::Iterator::operator--(int)
 	{
-		const iterator self = *this;
+		const Iterator self = *this;
 		--(*this);
 		return self;
 	}
 
-	int my_dynamic_list::iterator::operator*() const
+	int MyDynamicList::Iterator::operator*() const
 	{
 		return *_pointer;
 	}
 
-	int* my_dynamic_list::iterator::operator->() const
+	int* MyDynamicList::Iterator::operator->() const
 	{
 		return _pointer;
 	}
 
-	my_dynamic_list::iterator::operator int*() const
+	MyDynamicList::Iterator::operator int*() const
 	{
 		return _pointer;
 	}
 
-	bool my_dynamic_list::iterator::operator==(const iterator& other) const
+	bool MyDynamicList::Iterator::operator==(const Iterator& other) const
 	{
-		return this->_pointer == other._pointer;
+		return _pointer == other._pointer;
 	}
 
-	bool my_dynamic_list::iterator::operator!=(const iterator& other) const
+	bool MyDynamicList::Iterator::operator!=(const Iterator& other) const
 	{
-		return !(this->_pointer == other._pointer);
+		return !(_pointer == other._pointer);
 	}
 
 	//constructors
-	my_dynamic_list::my_dynamic_list() : my_dynamic_list(default_capacity) { }
+	MyDynamicList::MyDynamicList() : MyDynamicList(default_capacity) { }
 
-	my_dynamic_list::my_dynamic_list(my_dynamic_list& copy)
+	MyDynamicList::MyDynamicList(MyDynamicList& copy)
 	{
-		_array = new int[copy.get_capacity()];
-		_capacity = copy.get_capacity();
+		array_ = new int[copy.get_capacity()];
+		capacity_ = copy.get_capacity();
 		for(const int i : copy)
 		{
 			add(i);
 		}
 	}
 
-	my_dynamic_list::my_dynamic_list(const int capacity)
+	MyDynamicList::MyDynamicList(const int capacity)
 	{
 		if (capacity <= 0) throw std::exception("Capacity can't be 0");
-		_array = new int[capacity];
-		_capacity = capacity;
+		array_ = new int[capacity];
+		capacity_ = capacity;
 	}
 
-	my_dynamic_list::my_dynamic_list(int array[], int size_of_array)
+	MyDynamicList::MyDynamicList(int array[], int size_of_array)
 	{
-		_array = new int[size_of_array];
+		array_ = new int[size_of_array];
 		for(int i = 0; i < size_of_array; i++)
 		{
-			_array[i] = array[i];
+			array_[i] = array[i];
 		}
-		_count = size_of_array;
-		_capacity = size_of_array;
+		count_ = size_of_array;
+		capacity_ = size_of_array;
 	}
 
 	//public functions
-	void my_dynamic_list::add(const int value)
+	void MyDynamicList::add(const int value)
 	{
-		ensure_capacity(_count + 1);
-		_array[_count++] = value;
+		++count_;
+		ensure_capacity();
+		array_[count_ - 1] = value;
 	}
 
-	void my_dynamic_list::remove_at(int index)
+	void MyDynamicList::remove_at(int index)
 	{
 		validate_in_bounds(index);
 
@@ -109,7 +110,7 @@ namespace ds
 		remove_all(func);
 	}
 
-	void my_dynamic_list::remove_all(const std::function<bool(int)>& predicate)
+	void MyDynamicList::remove_all(const std::function<bool(int)>& predicate)
 	{
 		const std::function<bool(int, int)> func = [predicate](const int item, const int _)
 		{
@@ -119,91 +120,92 @@ namespace ds
 		remove_all(func);
 	}
 
-	void my_dynamic_list::remove_all(const std::function<bool(int, int)>& predicate)
+	void MyDynamicList::remove_all(const std::function<bool(int, int)>& predicate)
 	{
 		int left = -1;
 		int new_count = 0;
-		for (int right = 0; right < _capacity; right++)
+		for (int right = 0; right < capacity_; right++)
 		{
-			const int value = *(_array + right);
+			const int value = *(array_ + right);
 
 			if (predicate(value, right)) continue;
 			
 			left++;
 			new_count++;
 
-			const int temp = _array[left];
-			_array[left] = _array[right];
-			_array[right] = temp;
+			const int temp = array_[left];
+			array_[left] = array_[right];
+			array_[right] = temp;
 		}
-		_count = new_count;
+		count_ = new_count;
 	}
 
-	int& my_dynamic_list::operator[](const int index) const
+	int& MyDynamicList::operator[](const int index) const
 	{
 		validate_in_bounds(index);
-		return *(_array + index);
+		return *(array_ + index);
 	}
 
-	int my_dynamic_list::get_count() const
+	int MyDynamicList::get_count() const
 	{
-		return _count;
+		return count_;
 	}
 
-	int my_dynamic_list::get_capacity() const
+	int MyDynamicList::get_capacity() const
 	{
-		return _capacity;
+		return capacity_;
 	}
 
-	int my_dynamic_list::get_at(const int index) const
+	int MyDynamicList::get_at(const int index) const
 	{
 		validate_in_bounds(index);
-		return *(_array + index);
+		return *(array_ + index);
 	}
 
-	void my_dynamic_list::set_at(const int index, const int value) const
+	void MyDynamicList::set_at(const int index, const int value) const
 	{
 
 		validate_in_bounds(index);
-		int* ref = _array + index;
+		int* ref = array_ + index;
 		*ref = value;
 	}
 
-	my_dynamic_list::iterator my_dynamic_list::begin()
+	MyDynamicList::Iterator MyDynamicList::begin()
 	{
-		return iterator(_array);
+		return Iterator(array_);
 	}
 
-	my_dynamic_list::iterator my_dynamic_list::end()
+	MyDynamicList::Iterator MyDynamicList::end()
 	{
-		return iterator(_array + _count);
+		return Iterator(array_ + count_);
 	}
 
-	my_dynamic_list::~my_dynamic_list()
+	MyDynamicList::~MyDynamicList()
 	{
-		delete[] _array;
+		delete[] array_;
 	}
 
 	//private functions
-	void my_dynamic_list::ensure_capacity(const int new_capacity)
+	void MyDynamicList::ensure_capacity()
 	{
-		if (new_capacity <= _capacity) return;
+		if (count_ <= capacity_) return;
 
+		const int new_capacity = capacity_ * 2;
 		const auto copy = new int[new_capacity];
 
-		for (int i = 0; i < _capacity; i++)
+		for (int i = 0; i < capacity_; i++)
 		{
-			const int value = *(_array + i);
+			const int value = *(array_ + i);
 			copy[i] = value;
 		}
 
-		delete[] _array;
+		delete[] array_;
 
-		_array = copy;
-		_capacity *= 2;
+		array_ = copy;
+		capacity_ = new_capacity;
 	}
 
-	inline void my_dynamic_list::validate_in_bounds(const int index) const
+	inline void MyDynamicList::validate_in_bounds(const int index) const
 	{
 		if (0 > index || index >= get_count())
 		{
