@@ -139,15 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="MyDynamicList.h" />
     <ClInclude Include="MyLinkedList.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Cpp.cpp" />
-    <ClCompile Include="Interfaces.cpp" />
     <ClCompile Include="MyDynamicList.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
