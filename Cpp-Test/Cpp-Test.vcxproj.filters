@@ -7,6 +7,8 @@
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="IStackTests.cpp" />
+    <ClCompile Include="IQueueTests.cpp" />
+    <ClCompile Include="IDequeTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

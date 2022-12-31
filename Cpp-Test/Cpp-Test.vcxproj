@@ -37,6 +37,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IDequeTests.cpp" />
+    <ClCompile Include="IQueueTests.cpp" />
     <ClCompile Include="MemoryLeakDetector.cpp" />
     <ClCompile Include="MyDynamicListTests.cpp" />
     <ClCompile Include="pch.cpp">
