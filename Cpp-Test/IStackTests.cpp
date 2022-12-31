@@ -6,93 +6,109 @@ struct LinkedListStackTest : public ::testing::Test
 protected:
 	std::unique_ptr<IStack<int>> link_list;
 
-	void SetUp() override {
-		// Set the member variable to an instance of a concrete class
+	void SetUp() override
+	{
 		link_list = std::make_unique<MyLinkedList<int>>();
 	}
 
-	void TearDown() override {
+	void TearDown() override
+	{
 		link_list.reset();
 	}
 };
 
-void Push3PeekExpect3(IStack<int>& stack)
+void WhenPushing_ShouldIncreaseCount(IStack<int>& stack)
 {
-	stack.push(3);
-	const int& item = stack.peek_last();
-	ASSERT_EQ(item, 3);
+	ASSERT_EQ(stack.get_count(), 0);
+
+	stack.push(1);
 	ASSERT_EQ(stack.get_count(), 1);
+
+	stack.push(2);
+	ASSERT_EQ(stack.get_count(), 2);
+
+	stack.push(3);
+	ASSERT_EQ(stack.get_count(), 3);
 }
 
-void Push42PopExpect42(IStack<int>& stack)
+void WhenPeeking_ShouldBeLastPushed(IStack<int>& stack)
 {
-	stack.push(42);
-	const int& item = stack.pop();
-	ASSERT_EQ(item, 42);
+	stack.push(5);
+	ASSERT_EQ(stack.peek_last(), 5);
+
+	stack.push(10);
+	ASSERT_EQ(stack.peek_last(), 10);
+
+	stack.push(15);
+	ASSERT_EQ(stack.peek_last(), 15);
+}
+
+void WhenPopping_ShouldRemoveThemInFiloOrder(IStack<int>& stack)
+{
+	stack.push(5);
+	stack.push(10);
+	stack.push(15);
+
+	ASSERT_EQ(stack.pop(), 15);
+	ASSERT_EQ(stack.pop(), 10);
+	ASSERT_EQ(stack.pop(), 5);
+}
+
+void WhenPopping_ShouldDecreaseCount(IStack<int>& stack)
+{
+	stack.push(5);
+	stack.push(10);
+	stack.push(15);
+	ASSERT_EQ(stack.get_count(), 3);
+
+	stack.pop();
+	ASSERT_EQ(stack.get_count(), 2);
+
+	stack.pop();
+	ASSERT_EQ(stack.get_count(), 1);
+
+	stack.pop();
 	ASSERT_EQ(stack.get_count(), 0);
 }
 
-void Push1Push2Push3PopExpect3(IStack<int>& stack)
-{
-	stack.push(1);
-	stack.push(2);
-	stack.push(3);
-	const int& item = stack.pop();
-	ASSERT_EQ(item, 3);
-	ASSERT_EQ(stack.get_count(), 2);
-}
-
-void Push1Push2Push3PopPopExpect3Then2(IStack<int>& stack)
-{
-	stack.push(1);
-	stack.push(2);
-	stack.push(3);
-	int item = stack.pop();
-	ASSERT_EQ(item, 3);
-	ASSERT_EQ(stack.get_count(), 2);
-	item = stack.pop();
-	ASSERT_EQ(item, 2);
-	ASSERT_EQ(stack.get_count(), 1);
-}
-
-void PeekEmptyStackExpectThrow(IStack<int>& stack)
+void WhenPeekingEmpty_ShouldThrow(IStack<int>& stack)
 {
 	ASSERT_TRUE(stack.get_count() == 0, "incorrect test set up");
 	ASSERT_THROW({ stack.peek_last(); }, std::exception);
 }
 
-void PopEmptyStackExpectThrow(IStack<int>& stack)
+void WhenPoppingEmpty_ShouldThrow(IStack<int>& stack)
 {
 	ASSERT_TRUE(stack.get_count() == 0, "incorrect test set up");
 	ASSERT_THROW({ stack.pop(); }, std::exception);
 }
 
-TEST_F(LinkedListStackTest, WhenPush3Peek_Expect3)
+TEST_F(LinkedListStackTest, WhenPushing_ShouldIncreaseCount)
 {
-	Push3PeekExpect3(*link_list);
+	WhenPushing_ShouldIncreaseCount(*link_list);
 }
 
-TEST_F(LinkedListStackTest, WhenPush42Pop_Expect42)
+TEST_F(LinkedListStackTest, WhenPeeking_ShouldBeLastPushed)
 {
-	Push42PopExpect42(*link_list);
+	WhenPeeking_ShouldBeLastPushed(*link_list);
 }
 
-TEST_F(LinkedListStackTest, WhenPush1Push2Push3Pop_Expect3)
+TEST_F(LinkedListStackTest, WhenPopping_ShouldRemoveThemInFiloOrder)
 {
-	Push1Push2Push3PopExpect3(*link_list);
+	WhenPopping_ShouldRemoveThemInFiloOrder(*link_list);
 }
 
-TEST_F(LinkedListStackTest, WhenPush1Push2Push3PopPop_Expect3Then2)
+TEST_F(LinkedListStackTest, WhenPopping_ShouldDecreaseCount)
 {
-	Push1Push2Push3PopExpect3(*link_list);
+	WhenPopping_ShouldDecreaseCount(*link_list);
 }
 
-TEST_F(LinkedListStackTest, WhenPeekingEmptyStack_ShouldThrow)
+TEST_F(LinkedListStackTest, WhenPeekingEmpty_ShouldThrow)
 {
-	PeekEmptyStackExpectThrow(*link_list);
+	WhenPeekingEmpty_ShouldThrow(*link_list);
 }
 
-TEST_F(LinkedListStackTest, WhenPoppingEmptyStack_ShouldThrow)
+TEST_F(LinkedListStackTest, WhenPoppingEmpty_ShouldThrow)
 {
-	PopEmptyStackExpectThrow(*link_list);
+	WhenPoppingEmpty_ShouldThrow(*link_list);
 }
