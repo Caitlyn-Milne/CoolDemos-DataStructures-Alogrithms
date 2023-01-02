@@ -117,6 +117,15 @@ void GivenEmpty_WhenPeekingFirst_ShouldThrow(IDeque<int>& deque)
 	ASSERT_THROW({ deque.peek_first(); }, std::exception);
 }
 
+void GivenCleared_WhenAddingFirst_ShouldContain(IDeque<int>& deque)
+{
+	deque.add_first(1);
+	deque.remove_first();
+
+	deque.add_first(2);
+	ASSERT_EQ(deque.peek_first(), 2);
+}
+
 void GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast(IDeque<int>& deque)
 {
 	deque.add_last(5);
@@ -201,6 +210,15 @@ void GivenEmpty_WhenPeekingLast_ShouldThrow(IDeque<int>& deque)
 	ASSERT_THROW({ deque.peek_last(); }, std::exception);
 }
 
+void GivenCleared_WhenAddingLast_ShouldContain(IDeque<int>& deque)
+{
+	deque.add_last(1);
+	deque.remove_last();
+
+	deque.add_last(2);
+	ASSERT_EQ(deque.peek_last(), 2);
+}
+
 /*** MyLinkedList ***/
 
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast)
@@ -283,6 +301,16 @@ TEST_F(LinkedListDequeTest, GivenEmpty_WhenPeekingFirst_ShouldThrow)
 	GivenEmpty_WhenPeekingFirst_ShouldThrow(*deque);
 }
 
+TEST_F(LinkedListDequeTest, GivenCleared_WhenAddingFirst_ShouldContain)
+{
+	GivenCleared_WhenAddingFirst_ShouldContain(*deque);
+}
+
+TEST_F(LinkedListDequeTest, GivenCleared_WhenAddingLast_ShouldContain)
+{
+	GivenCleared_WhenAddingLast_ShouldContain(*deque);
+}
+
 /*** MyArrayDeque ***/
 
 TEST_F(ArrayDequeTest, GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast)
@@ -363,4 +391,14 @@ TEST_F(ArrayDequeTest, GivenEmpty_WhenRemovingFirst_ShouldThrow)
 TEST_F(ArrayDequeTest, GivenEmpty_WhenPeekingFirst_ShouldThrow)
 {
 	GivenEmpty_WhenPeekingFirst_ShouldThrow(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenCleared_WhenAddingFirst_ShouldContain)
+{
+	GivenCleared_WhenAddingFirst_ShouldContain(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenCleared_WhenAddingLast_ShouldContain)
+{
+	GivenCleared_WhenAddingLast_ShouldContain(*deque);
 }

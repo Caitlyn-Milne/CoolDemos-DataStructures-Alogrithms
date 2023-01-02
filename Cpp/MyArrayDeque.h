@@ -59,7 +59,10 @@ const Type& MyArrayDeque<Type>::remove_last()
 {
 	if (get_count() == 0) throw std::exception("empty deque");
 	const Type& result = array_[last_index()];
-	--back_;
+	if (count_ != 1)
+	{
+		--back_;
+	}
 	--count_;
 	return result;
 }
@@ -91,7 +94,10 @@ const Type& MyArrayDeque<Type>::remove_first()
 {
 	if (get_count() == 0) throw std::exception("empty deque");
 	const Type& result = array_[first_index()];
-	++front_;
+	if (count_ != 1)
+	{
+		++front_;
+	}
 	--count_;
 	return result;
 }

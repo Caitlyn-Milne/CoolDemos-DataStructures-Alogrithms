@@ -97,6 +97,15 @@ void WhenPeeking_ShouldReturnNext(IQueue<int>& queue)
 	ASSERT_EQ(queue.peek_first(), 3);
 }
 
+void GivenCleared_WhenOffering_ShouldContain(IQueue<int>& queue)
+{
+	queue.offer(1);
+	queue.poll();
+
+	queue.offer(2);
+	ASSERT_EQ(queue.peek_first(), 2);
+}
+
 /*** MyLinkedList ***/
 
 TEST_F(LinkedListQueueTest, WhenOffering_ShouldIncreaseCount)
@@ -129,6 +138,11 @@ TEST_F(LinkedListQueueTest, WhenPeeking_ShouldReturnNext)
 	WhenPeeking_ShouldReturnNext(*queue);
 }
 
+TEST_F(LinkedListQueueTest, GivenCleared_WhenOffering_ShouldContain)
+{
+	GivenCleared_WhenOffering_ShouldContain(*queue);
+}
+
 /*** MyArrayDeque ***/
 
 TEST_F(ArrayDequeQueueTest, WhenOffering_ShouldIncreaseCount)
@@ -159,4 +173,9 @@ TEST_F(ArrayDequeQueueTest, WhenPeekingEmpty_ShouldThrow)
 TEST_F(ArrayDequeQueueTest, WhenPeeking_ShouldReturnNext)
 {
 	WhenPeeking_ShouldReturnNext(*queue);
+}
+
+TEST_F(ArrayDequeQueueTest, GivenCleared_WhenOffering_ShouldContain)
+{
+	GivenCleared_WhenOffering_ShouldContain(*queue);
 }
