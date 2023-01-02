@@ -6,13 +6,17 @@ namespace ds
 	template<typename Type>
 	class MyLinkedList final : public IDeque<Type>
 	{
+		class Node;
+		using NodePtr = std::shared_ptr<Node>;
+		using WeakNodePtr = std::weak_ptr<Node>;
 		class Node
 		{
+			
 		private:
 			const Type& value_;
 		public:
-			Node* next_ = nullptr;
-			Node* previous_ = nullptr;
+			NodePtr next_ = nullptr;
+			WeakNodePtr previous_;
 			const Type& get_value();
 			explicit Node(const Type& type);
 
@@ -20,8 +24,8 @@ namespace ds
 		};
 
 	private:
-		Node* head_ = nullptr;
-		Node* tail_ = nullptr;
+		NodePtr head_ = nullptr;
+		NodePtr tail_ = nullptr;
 		int count_ = 0;
 	public:
 		void add_last(const Type&) override;
@@ -47,8 +51,8 @@ namespace ds
 	MyLinkedList<Type>::Node::~Node()
 	{
 		std::cout << "node destructor";
-		next_ = nullptr;
-		previous_ = nullptr;
+		next_.reset();
+		previous_.reset();
 	}
 
 	template <typename Type>
@@ -61,7 +65,7 @@ namespace ds
 	void MyLinkedList<Type>::add_last(const Type& item)
 	{
 		++count_;
-		Node* node = new Node(item);
+		NodePtr node = std::make_shared<Node>(item);
 		if (head_ == nullptr)
 		{
 			head_ = node;
@@ -79,7 +83,7 @@ namespace ds
 	{
 		validate_non_empty();
 		--count_;
-		auto prev = tail_->previous_;
+		NodePtr prev = tail_->previous_.lock();
 		if (prev != nullptr)
 		{
 			prev->next_ = nullptr;
@@ -89,7 +93,6 @@ namespace ds
 			head_ = nullptr;
 		}
 		const Type& result = tail_->get_value();
-		delete tail_;
 		tail_ = prev;
 		return result;
 	}
@@ -105,7 +108,7 @@ namespace ds
 	void MyLinkedList<Type>::add_first(const Type& item)
 	{
 		++count_;
-		Node* node = new Node(item);
+		NodePtr node = std::make_shared<Node>(item);
 		if (tail_ == nullptr)
 		{
 			tail_ = node;
@@ -123,17 +126,16 @@ namespace ds
 	{
 		validate_non_empty();
 		--count_;
-		auto next = head_->next_;
+		NodePtr next = head_->next_;
 		if (next != nullptr)
 		{
-			next->previous_ = nullptr;
+			next->previous_.reset();
 		}
 		else
 		{
 			tail_ = nullptr;
 		}
 		const Type& result = head_->get_value();
-		delete head_;
 		head_ = next;
 		return result;
 	}
@@ -154,15 +156,7 @@ namespace ds
 	template <typename Type>
 	MyLinkedList<Type>::~MyLinkedList()
 	{
-		Node* node = head_;
-		while(node != nullptr)
-		{
-			Node* next = node->next_;
-			delete node;
-			node = next;
-		}
-		tail_ = nullptr;
-		head_ = nullptr;
+		std::cout << head_.use_count() << std::endl;
 	}
 
 	template <typename Type>
