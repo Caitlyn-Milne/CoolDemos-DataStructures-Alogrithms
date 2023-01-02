@@ -4,16 +4,32 @@ using namespace ds;
 struct LinkedListQueueTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<IQueue<int>> link_list;
+	std::unique_ptr<IQueue<int>> queue;
 
 	void SetUp() override
 	{
-		link_list = std::make_unique<MyLinkedList<int>>();
+		queue = std::make_unique<MyLinkedList<int>>();
 	}
 
 	void TearDown() override
 	{
-		link_list.reset();
+		queue.reset();
+	}
+};
+
+struct ArrayDequeQueueTest : public ::testing::Test
+{
+protected:
+	std::unique_ptr<IQueue<int>> queue;
+
+	void SetUp() override
+	{
+		queue = std::make_unique<MyArrayDeque<int>>();
+	}
+
+	void TearDown() override
+	{
+		queue.reset();
 	}
 };
 
@@ -81,32 +97,66 @@ void WhenPeeking_ShouldReturnNext(IQueue<int>& queue)
 	ASSERT_EQ(queue.peek_first(), 3);
 }
 
+/*** MyLinkedList ***/
+
 TEST_F(LinkedListQueueTest, WhenOffering_ShouldIncreaseCount)
 {
-	WhenOffering_ShouldIncreaseCount(*link_list);
+	WhenOffering_ShouldIncreaseCount(*queue);
 }
 
 TEST_F(LinkedListQueueTest, WhenPolling_ShouldRemoveThemInFifoOrder)
 {
-	WhenPolling_ShouldRemoveThemInFifoOrder(*link_list);
+	WhenPolling_ShouldRemoveThemInFifoOrder(*queue);
 }
 
 TEST_F(LinkedListQueueTest, WhenPolling_ShouldDecreaseCount)
 {
-	WhenPolling_ShouldDecreaseCount(*link_list);
+	WhenPolling_ShouldDecreaseCount(*queue);
 }
 
 TEST_F(LinkedListQueueTest, WhenPollingEmpty_ShouldThrow)
 {
-	WhenPollingEmpty_ShouldThrow(*link_list);
+	WhenPollingEmpty_ShouldThrow(*queue);
 }
 
 TEST_F(LinkedListQueueTest, WhenPeekingEmpty_ShouldThrow)
 {
-	WhenPeekingEmpty_ShouldThrow(*link_list);
+	WhenPeekingEmpty_ShouldThrow(*queue);
 }
 
 TEST_F(LinkedListQueueTest, WhenPeeking_ShouldReturnNext)
 {
-	WhenPeeking_ShouldReturnNext(*link_list);
+	WhenPeeking_ShouldReturnNext(*queue);
+}
+
+/*** MyArrayDeque ***/
+
+TEST_F(ArrayDequeQueueTest, WhenOffering_ShouldIncreaseCount)
+{
+	WhenOffering_ShouldIncreaseCount(*queue);
+}
+
+TEST_F(ArrayDequeQueueTest, WhenPolling_ShouldRemoveThemInFifoOrder)
+{
+	WhenPolling_ShouldRemoveThemInFifoOrder(*queue);
+}
+
+TEST_F(ArrayDequeQueueTest, WhenPolling_ShouldDecreaseCount)
+{
+	WhenPolling_ShouldDecreaseCount(*queue);
+}
+
+TEST_F(ArrayDequeQueueTest, WhenPollingEmpty_ShouldThrow)
+{
+	WhenPollingEmpty_ShouldThrow(*queue);
+}
+
+TEST_F(ArrayDequeQueueTest, WhenPeekingEmpty_ShouldThrow)
+{
+	WhenPeekingEmpty_ShouldThrow(*queue);
+}
+
+TEST_F(ArrayDequeQueueTest, WhenPeeking_ShouldReturnNext)
+{
+	WhenPeeking_ShouldReturnNext(*queue);
 }

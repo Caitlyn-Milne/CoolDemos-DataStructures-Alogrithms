@@ -4,16 +4,32 @@ using namespace ds;
 struct LinkedListDequeTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<IDeque<int>> link_list;
+	std::unique_ptr<IDeque<int>> deque;
 
 	void SetUp() override
 	{
-		link_list = std::make_unique<MyLinkedList<int>>();
+		deque = std::make_unique<MyLinkedList<int>>();
 	}
 
 	void TearDown() override
 	{
-		link_list.reset();
+		deque.reset();
+	}
+};
+
+struct ArrayDequeTest : public ::testing::Test
+{
+protected:
+	std::unique_ptr<IDeque<int>> deque;
+
+	void SetUp() override
+	{
+		deque = std::make_unique<MyArrayDeque<int>>();
+	}
+
+	void TearDown() override
+	{
+		deque.reset();
 	}
 };
 
@@ -185,82 +201,166 @@ void GivenEmpty_WhenPeekingLast_ShouldThrow(IDeque<int>& deque)
 	ASSERT_THROW({ deque.peek_last(); }, std::exception);
 }
 
+/*** MyLinkedList ***/
+
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast)
 {
-	GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast(*link_list);
+	GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenAddingLast_ShouldIncreaseCount)
 {
-	WhenAddingLast_ShouldIncreaseCount(*link_list);
+	WhenAddingLast_ShouldIncreaseCount(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenAddingFirst_ShouldBeLast)
 {
-	WhenAddingFirst_ShouldBeLast(*link_list);
+	WhenAddingFirst_ShouldBeLast(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenRemovingLast_ShouldRemoveReverseInOrder)
 {
-	WhenRemovingLast_ShouldRemoveReverseInOrder(*link_list);
+	WhenRemovingLast_ShouldRemoveReverseInOrder(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenRemovingLast_ShouldDecreaseCount)
 {
-	WhenRemovingLast_ShouldDecreaseCount(*link_list);
+	WhenRemovingLast_ShouldDecreaseCount(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenSize2_WhenRemovingLast_ShouldHaveEqualFirstAndLast)
 {
-	GivenSize2_WhenRemovingLast_ShouldHaveEqualFirstAndLast(*link_list);
+	GivenSize2_WhenRemovingLast_ShouldHaveEqualFirstAndLast(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenRemovingLast_ShouldThrow)
 {
-	GivenEmpty_WhenRemovingLast_ShouldThrow(*link_list);
+	GivenEmpty_WhenRemovingLast_ShouldThrow(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenPeekingLast_ShouldThrow)
 {
-	GivenEmpty_WhenPeekingLast_ShouldThrow(*link_list);
+	GivenEmpty_WhenPeekingLast_ShouldThrow(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenAddingFirst_ShouldBeFirstAndLast)
 {
-	GivenEmpty_WhenAddingFirst_ShouldBeFirstAndLast(*link_list);
+	GivenEmpty_WhenAddingFirst_ShouldBeFirstAndLast(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenAddingFirst_ShouldIncreaseCount)
 {
-	WhenAddingFirst_ShouldIncreaseCount(*link_list);
+	WhenAddingFirst_ShouldIncreaseCount(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenAddingFirst_ShouldBeFirst)
 {
-	WhenAddingFirst_ShouldBeFirst(*link_list);
+	WhenAddingFirst_ShouldBeFirst(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenRemovingFirst_ShouldRemoveInOrder)
 {
-	WhenRemovingFirst_ShouldRemoveInOrder(*link_list);
+	WhenRemovingFirst_ShouldRemoveInOrder(*deque);
 }
 
 TEST_F(LinkedListDequeTest, WhenRemovingFirst_ShouldDecreaseCount)
 {
-	WhenRemovingFirst_ShouldDecreaseCount(*link_list);
+	WhenRemovingFirst_ShouldDecreaseCount(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenSize2_WhenRemovingFirst_ShouldHaveEqualFirstAndLast)
 {
-	GivenSize2_WhenRemovingFirst_ShouldHaveEqualFirstAndLast(*link_list);
+	GivenSize2_WhenRemovingFirst_ShouldHaveEqualFirstAndLast(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenRemovingFirst_ShouldThrow)
 {
-	GivenEmpty_WhenRemovingFirst_ShouldThrow(*link_list);
+	GivenEmpty_WhenRemovingFirst_ShouldThrow(*deque);
 }
 
 TEST_F(LinkedListDequeTest, GivenEmpty_WhenPeekingFirst_ShouldThrow)
 {
-	GivenEmpty_WhenPeekingFirst_ShouldThrow(*link_list);
+	GivenEmpty_WhenPeekingFirst_ShouldThrow(*deque);
+}
+
+/*** MyArrayDeque ***/
+
+TEST_F(ArrayDequeTest, GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast)
+{
+	GivenEmpty_WhenAddingLast_ShouldBeFirstAndLast(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenAddingLast_ShouldIncreaseCount)
+{
+	WhenAddingLast_ShouldIncreaseCount(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenAddingFirst_ShouldBeLast)
+{
+	WhenAddingFirst_ShouldBeLast(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenRemovingLast_ShouldRemoveReverseInOrder)
+{
+	WhenRemovingLast_ShouldRemoveReverseInOrder(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenRemovingLast_ShouldDecreaseCount)
+{
+	WhenRemovingLast_ShouldDecreaseCount(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenSize2_WhenRemovingLast_ShouldHaveEqualFirstAndLast)
+{
+	GivenSize2_WhenRemovingLast_ShouldHaveEqualFirstAndLast(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenEmpty_WhenRemovingLast_ShouldThrow)
+{
+	GivenEmpty_WhenRemovingLast_ShouldThrow(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenEmpty_WhenPeekingLast_ShouldThrow)
+{
+	GivenEmpty_WhenPeekingLast_ShouldThrow(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenEmpty_WhenAddingFirst_ShouldBeFirstAndLast)
+{
+	GivenEmpty_WhenAddingFirst_ShouldBeFirstAndLast(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenAddingFirst_ShouldIncreaseCount)
+{
+	WhenAddingFirst_ShouldIncreaseCount(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenAddingFirst_ShouldBeFirst)
+{
+	WhenAddingFirst_ShouldBeFirst(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenRemovingFirst_ShouldRemoveInOrder)
+{
+	WhenRemovingFirst_ShouldRemoveInOrder(*deque);
+}
+
+TEST_F(ArrayDequeTest, WhenRemovingFirst_ShouldDecreaseCount)
+{
+	WhenRemovingFirst_ShouldDecreaseCount(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenSize2_WhenRemovingFirst_ShouldHaveEqualFirstAndLast)
+{
+	GivenSize2_WhenRemovingFirst_ShouldHaveEqualFirstAndLast(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenEmpty_WhenRemovingFirst_ShouldThrow)
+{
+	GivenEmpty_WhenRemovingFirst_ShouldThrow(*deque);
+}
+
+TEST_F(ArrayDequeTest, GivenEmpty_WhenPeekingFirst_ShouldThrow)
+{
+	GivenEmpty_WhenPeekingFirst_ShouldThrow(*deque);
 }

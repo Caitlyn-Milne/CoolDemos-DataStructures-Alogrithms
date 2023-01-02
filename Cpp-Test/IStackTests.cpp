@@ -4,16 +4,32 @@ using namespace ds;
 struct LinkedListStackTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<IStack<int>> link_list;
+	std::unique_ptr<IStack<int>> stack;
 
 	void SetUp() override
 	{
-		link_list = std::make_unique<MyLinkedList<int>>();
+		stack = std::make_unique<MyLinkedList<int>>();
 	}
 
 	void TearDown() override
 	{
-		link_list.reset();
+		stack.reset();
+	}
+};
+
+struct ArrayDequeStackTest : public ::testing::Test
+{
+protected:
+	std::unique_ptr<IStack<int>> stack;
+
+	void SetUp() override
+	{
+		stack = std::make_unique<MyLinkedList<int>>();
+	}
+
+	void TearDown() override
+	{
+		stack.reset();
 	}
 };
 
@@ -83,32 +99,66 @@ void WhenPoppingEmpty_ShouldThrow(IStack<int>& stack)
 	ASSERT_THROW({ stack.pop(); }, std::exception);
 }
 
+/*** MyLinkedList ***/
+
 TEST_F(LinkedListStackTest, WhenPushing_ShouldIncreaseCount)
 {
-	WhenPushing_ShouldIncreaseCount(*link_list);
+	WhenPushing_ShouldIncreaseCount(*stack);
 }
 
 TEST_F(LinkedListStackTest, WhenPeeking_ShouldBeLastPushed)
 {
-	WhenPeeking_ShouldBeLastPushed(*link_list);
+	WhenPeeking_ShouldBeLastPushed(*stack);
 }
 
 TEST_F(LinkedListStackTest, WhenPopping_ShouldRemoveThemInFiloOrder)
 {
-	WhenPopping_ShouldRemoveThemInFiloOrder(*link_list);
+	WhenPopping_ShouldRemoveThemInFiloOrder(*stack);
 }
 
 TEST_F(LinkedListStackTest, WhenPopping_ShouldDecreaseCount)
 {
-	WhenPopping_ShouldDecreaseCount(*link_list);
+	WhenPopping_ShouldDecreaseCount(*stack);
 }
 
 TEST_F(LinkedListStackTest, WhenPeekingEmpty_ShouldThrow)
 {
-	WhenPeekingEmpty_ShouldThrow(*link_list);
+	WhenPeekingEmpty_ShouldThrow(*stack);
 }
+
+/*** MyArrayDeque ***/
 
 TEST_F(LinkedListStackTest, WhenPoppingEmpty_ShouldThrow)
 {
-	WhenPoppingEmpty_ShouldThrow(*link_list);
+	WhenPoppingEmpty_ShouldThrow(*stack);
+}
+
+TEST_F(ArrayDequeStackTest, WhenPushing_ShouldIncreaseCount)
+{
+	WhenPushing_ShouldIncreaseCount(*stack);
+}
+
+TEST_F(ArrayDequeStackTest, WhenPeeking_ShouldBeLastPushed)
+{
+	WhenPeeking_ShouldBeLastPushed(*stack);
+}
+
+TEST_F(ArrayDequeStackTest, WhenPopping_ShouldRemoveThemInFiloOrder)
+{
+	WhenPopping_ShouldRemoveThemInFiloOrder(*stack);
+}
+
+TEST_F(ArrayDequeStackTest, WhenPopping_ShouldDecreaseCount)
+{
+	WhenPopping_ShouldDecreaseCount(*stack);
+}
+
+TEST_F(ArrayDequeStackTest, WhenPeekingEmpty_ShouldThrow)
+{
+	WhenPeekingEmpty_ShouldThrow(*stack);
+}
+
+TEST_F(ArrayDequeStackTest, WhenPoppingEmpty_ShouldThrow)
+{
+	WhenPoppingEmpty_ShouldThrow(*stack);
 }

@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Interfaces.h" />
+    <ClInclude Include="MyArrayDeque.h" />
     <ClInclude Include="MyDynamicList.h" />
     <ClInclude Include="MyLinkedList.h" />
     <ClInclude Include="pch.h" />

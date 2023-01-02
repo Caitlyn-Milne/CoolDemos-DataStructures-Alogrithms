@@ -62,7 +62,7 @@ public class MyDynamicListTests
         {
             list.Add(i);
             expect[i] = i;
-        }
+        } 
         Assert.That(list, Is.EqualTo(expect));
     }
 

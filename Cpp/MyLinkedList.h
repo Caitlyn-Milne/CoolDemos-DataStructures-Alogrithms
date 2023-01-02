@@ -19,8 +19,6 @@ namespace ds
 			WeakNodePtr previous_;
 			const Type& get_value();
 			explicit Node(const Type& type);
-
-			~Node();
 		};
 
 	private:
@@ -38,22 +36,12 @@ namespace ds
 
 		int get_count() override;
 
-		~MyLinkedList() override;
-
 	private:
 		void validate_non_empty();
 	};
 
 	template <typename Type>
 	MyLinkedList<Type>::Node::Node(const Type& type) : value_(type) {}
-
-	template <typename Type>
-	MyLinkedList<Type>::Node::~Node()
-	{
-		std::cout << "node destructor";
-		next_.reset();
-		previous_.reset();
-	}
 
 	template <typename Type>
 	const Type& MyLinkedList<Type>::Node::get_value()
@@ -151,12 +139,6 @@ namespace ds
 	int MyLinkedList<Type>::get_count()
 	{
 		return count_;
-	}
-
-	template <typename Type>
-	MyLinkedList<Type>::~MyLinkedList()
-	{
-		std::cout << head_.use_count() << std::endl;
 	}
 
 	template <typename Type>
