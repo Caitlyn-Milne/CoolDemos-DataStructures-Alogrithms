@@ -30,12 +30,18 @@
     <ClInclude Include="MyArrayDeque.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyTrie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyDynamicList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTrie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

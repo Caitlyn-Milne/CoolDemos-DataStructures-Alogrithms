@@ -9,6 +9,7 @@
     <ClCompile Include="IStackTests.cpp" />
     <ClCompile Include="IQueueTests.cpp" />
     <ClCompile Include="IDequeTests.cpp" />
+    <ClCompile Include="MyTrieTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
