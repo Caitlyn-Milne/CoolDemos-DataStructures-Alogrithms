@@ -9,6 +9,7 @@
 #include "../Cpp/MyDynamicList.h"
 #include "../Cpp/MyLinkedList.h"
 #include "../Cpp/MyArrayDeque.h"
+#include "../Cpp/MyLruCache.h"
 #include "../Cpp/MyTrie.h"
 #include "MemoryLeakDetector.h"
 #include <functional>
