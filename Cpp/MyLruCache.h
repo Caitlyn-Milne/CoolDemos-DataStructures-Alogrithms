@@ -30,6 +30,7 @@ namespace ds
 		bool is_empty();
 	};
 
+	//O(n log n) 
 	template <typename TKey, typename TValue>
 	void MyLruCache<TKey, TValue>::remove_excess()
 	{
@@ -42,24 +43,29 @@ namespace ds
 		}
 	}
 
+	//O(1)
 	template <typename TKey, typename TValue>
 	uint64_t MyLruCache<TKey, TValue>::get_time()
 	{
 		return ++time_;
 	}
 
+	//O(1) 
 	template <typename TKey, typename TValue>
 	size_t MyLruCache<TKey, TValue>::size()
 	{
 		return key_to_value.size();
 	}
 
+	//O(1) 
 	template <typename TKey, typename TValue>
 	size_t MyLruCache<TKey, TValue>::get_capacity() const
 	{
 		return capacity_;
 	}
 
+	//O(n log n) worse case
+	//O(1) best case
 	template <typename TKey, typename TValue>
 	void MyLruCache<TKey, TValue>::set_capacity(size_t capacity)
 	{
@@ -67,6 +73,7 @@ namespace ds
 		remove_excess();
 	}
 
+	//O(log n)
 	template <typename TKey, typename TValue>
 	void MyLruCache<TKey, TValue>::put(const TKey& key, TValue& value)
 	{
@@ -83,6 +90,7 @@ namespace ds
 		remove_excess();
 	}
 
+	//O(log n)
 	template <typename TKey, typename TValue>
 	TValue& MyLruCache<TKey, TValue>::get(const TKey& key)
 	{
@@ -99,6 +107,7 @@ namespace ds
 		return (*got).second;
 	}
 
+	//O(log n)
 	template <typename TKey, typename TValue>
 	void MyLruCache<TKey, TValue>::remove(const TKey& key)
 	{
@@ -113,12 +122,14 @@ namespace ds
 		key_to_value.erase(key);
 	}
 
+	//O(1)
 	template <typename TKey, typename TValue>
 	bool MyLruCache<TKey, TValue>::contains(const TKey& key)
 	{
 		return key_to_value.find(key) != key_to_value.end();
 	}
 
+	//O(n)
 	template <typename TKey, typename TValue>
 	void MyLruCache<TKey, TValue>::clear()
 	{
@@ -128,12 +139,14 @@ namespace ds
 		time_ = 0;
 	}
 
+	//O(1)
 	template <typename TKey, typename TValue>
 	bool MyLruCache<TKey, TValue>::is_full()
 	{
 		return size() == get_capacity();
 	}
 
+	//O(1)
 	template <typename TKey, typename TValue>
 	bool MyLruCache<TKey, TValue>::is_empty()
 	{

@@ -417,7 +417,3 @@ TEST_F(MyLruCacheTest, GivenKeyAlreadyInLru_WhenPutting_Replace)
 {
 	GivenKeyAlreadyInLru_WhenPutting_Replace(*lru_cache_);
 }
-
-//todo more 0 capacity tests
-
-//todo what happends when put data with a key that already exsits
