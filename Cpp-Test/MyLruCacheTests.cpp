@@ -286,7 +286,7 @@ void GivenNeitherFullOrEmpty_WhenClearing_ShouldBeEmpty(MyLruCache<int, string>&
 	lru.put(2, two);
 
 	ASSERT_FALSE(lru.is_empty());
-	ASSERT_TRUE(lru.is_full());
+	ASSERT_FALSE(lru.is_full());
 
 	lru.clear();
 
@@ -313,8 +313,9 @@ void GivenKeyAlreadyInLru_WhenPutting_Replace(MyLruCache<int, string>& lru)
 	lru.put(1, one);
 	lru.put(2, two);
 
-	string ONE = "TWO";
+	string ONE = "ONE";
 	string TWO = "TWO";
+
 	lru.put(1, ONE);
 	lru.put(2, TWO);
 
@@ -411,7 +412,6 @@ TEST_F(MyLruCacheTest, GivenEmpty_WhenSetCapacityToZero_ShouldBeFullAndEmpty) //
 {
 	GivenEmpty_WhenSetCapacityToZero_ShouldBeFullAndEmpty(*lru_cache_);
 }
-
 
 TEST_F(MyLruCacheTest, GivenKeyAlreadyInLru_WhenPutting_Replace) 
 {
