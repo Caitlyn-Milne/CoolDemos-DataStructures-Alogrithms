@@ -17,6 +17,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="TrieDemo|Win32">
+      <Configuration>TrieDemo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="TrieDemo|x64">
+      <Configuration>TrieDemo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{33856220-147c-4b56-af1a-bd0132f2f585}</ProjectGuid>
@@ -34,6 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="MemoryLeakDetector.h" />
+    <ClInclude Include="MyTrieTestFixture.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +50,7 @@
     <ClCompile Include="IQueueTests.cpp" />
     <ClCompile Include="MemoryLeakDetector.cpp" />
     <ClCompile Include="MyDynamicListTests.cpp" />
+    <ClCompile Include="MyLruCacheTests.cpp" />
     <ClCompile Include="MyTrieTests.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

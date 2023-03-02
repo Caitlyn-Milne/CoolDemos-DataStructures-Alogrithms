@@ -10,12 +10,14 @@
     <ClCompile Include="IQueueTests.cpp" />
     <ClCompile Include="IDequeTests.cpp" />
     <ClCompile Include="MyTrieTests.cpp" />
+    <ClCompile Include="MyLruCacheTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="MemoryLeakDetector.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="MyTrieTestFixture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
