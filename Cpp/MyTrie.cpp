@@ -8,7 +8,7 @@ namespace ds
 	/*** Node ***/
 	MyTrie::Node::Node(char character) : character_(character)
 	{
-		nodes_ = vector<shared_ptr<Node>>();
+		nodes_ = std::vector<std::shared_ptr<Node>>();
 	}
 
 	char MyTrie::Node::get_character() const
@@ -16,7 +16,7 @@ namespace ds
 		return character_;
 	}
 
-	bool MyTrie::Node::find(const char c, shared_ptr<Node>& out_result) const
+	bool MyTrie::Node::find(const char c, std::shared_ptr<Node>& out_result) const
 	{
 		for (auto& node_ptr : nodes_)
 		{
@@ -29,16 +29,16 @@ namespace ds
 		return false;
 	}
 
-	shared_ptr<MyTrie::Node> MyTrie::Node::add(char c)
+	std::shared_ptr<MyTrie::Node> MyTrie::Node::add(char c)
 	{
-		shared_ptr<Node> node = make_shared<Node>(c);
+		std::shared_ptr<Node> node = std::make_shared<Node>(c);
 		nodes_.push_back(node);
 		return node;
 	}
 
 	bool MyTrie::Node::end_of_word() const
 	{
-		shared_ptr<Node> n;
+		std::shared_ptr<Node> n;
 		return find('\0', n);
 	}
 
@@ -48,12 +48,12 @@ namespace ds
 	}
 
 	/*** Search ***/
-	MyTrie::SearchIterator::SearchIterator(const weak_ptr<Node>& node) : node_(node){}
+	MyTrie::SearchIterator::SearchIterator(const std::weak_ptr<Node>& node) : node_(node){}
 
 	bool MyTrie::SearchIterator::next(char c)
 	{
 		validate_node();
-		shared_ptr<Node> found_node;
+		std::shared_ptr<Node> found_node;
 		const auto node = node_.lock();
 		if (!node->find(c, found_node))
 		{
@@ -64,12 +64,12 @@ namespace ds
 		return true;
 	}
 
-	string MyTrie::SearchIterator::generate_string() const
+	std::string MyTrie::SearchIterator::generate_string() const
 	{
 		return stream_.str();
 	}
 
-	void MyTrie::SearchIterator::reverse_string(string& str)
+	void MyTrie::SearchIterator::reverse_string(std::string& str)
 	{
 		int l = 0;
 		int r = str.size() - 1;
@@ -83,13 +83,13 @@ namespace ds
 		}
 	}
 
-	vector<string> MyTrie::SearchIterator::suggest_words(size_t max) const
+	std::vector<std::string> MyTrie::SearchIterator::suggest_words(size_t max) const
 	{
 		validate_node();
-		vector<shared_ptr<Node>> end_of_words;
-		unordered_map<shared_ptr<Node>, shared_ptr<Node>> node_to_parent;
+		std::vector<std::shared_ptr<Node>> end_of_words;
+		std::unordered_map<std::shared_ptr<Node>, std::shared_ptr<Node>> node_to_parent;
 		//bfs
-		queue<shared_ptr<Node>> queue;
+		std::queue<std::shared_ptr<Node>> queue;
 		queue.push(node_.lock());
 		node_to_parent[node_.lock()] = nullptr;
 		while (!queue.empty() && end_of_words.size() < max)
@@ -110,12 +110,12 @@ namespace ds
 			}
 		}
 		//build result
-		vector<string> result;
-		stringstream reverse_stream;
-		string prefix = stream_.str();
+		std::vector<std::string> result;
+		std::stringstream reverse_stream;
+		std::string prefix = stream_.str();
 		for(const auto& end_of_word : end_of_words)
 		{
-			shared_ptr<Node> node = end_of_word;
+			std::shared_ptr<Node> node = end_of_word;
 			while (node_to_parent[node] != nullptr)
 			{
 				const char c = node->get_character();
@@ -126,7 +126,7 @@ namespace ds
 				node = node_to_parent[node];
 			}
 			//reverse word
-			string str = reverse_stream.str();
+			std::string str = reverse_stream.str();
 			reverse_string(str);
 			result.push_back(prefix + str);
 			reverse_stream.str("");
@@ -138,30 +138,30 @@ namespace ds
 	{
 		if (node_.expired()) 
 		{
-			throw exception("word has expired, this implementation does not support concurrency, or concurrent modification");
+			throw std::exception("word has expired, this implementation does not support concurrency, or concurrent modification");
 		}
 	}
 
 
 	MyTrie::SearchIterator MyTrie::search_end()
 	{
-		return SearchIterator(weak_ptr<Node>());
+		return SearchIterator(std::weak_ptr<Node>());
 	}
 
 	/*** Trie ***/
 
 	MyTrie::MyTrie()
 	{
-		root_ = make_shared<Node>('\2');
+		root_ = std::make_shared<Node>('\2');
 	}
 
-	bool MyTrie::add_word(const string& str)
+	bool MyTrie::add_word(const std::string& str)
 	{
 		size_t i = 0;
-		shared_ptr<Node> node = root_;
+		std::shared_ptr<Node> node = root_;
 		while (i < str.length())
 		{
-			shared_ptr<Node> found_node;
+			std::shared_ptr<Node> found_node;
 			if (node->find(str[i], found_node))
 			{
 				node = found_node;
@@ -177,13 +177,13 @@ namespace ds
 		return true;
 	}
 
-	bool MyTrie::contains_word(const string& str) const
+	bool MyTrie::contains_word(const std::string& str) const
 	{
 		size_t i = 0;
-		shared_ptr<Node> node = root_;
+		std::shared_ptr<Node> node = root_;
 		while (i < str.length())
 		{
-			shared_ptr<Node> found_node;
+			std::shared_ptr<Node> found_node;
 			if (!node->find(str[i], found_node))
 			{
 				return false;
@@ -207,7 +207,7 @@ namespace ds
 		return false;
 	}
 
-	bool MyTrie::remove_word(const string& str)
+	bool MyTrie::remove_word(const std::string& str)
 	{
 		return remove_word_dfs(str, root_,0);
 	}
@@ -217,13 +217,13 @@ namespace ds
 		return SearchIterator(root_);
 	}
 
-	bool MyTrie::remove_word_dfs(const string& str, shared_ptr<Node> parent, size_t i)
+	bool MyTrie::remove_word_dfs(const std::string& str, std::shared_ptr<Node> parent, size_t i)
 	{
 		char c;
 		if (i >= str.length()) c = '\0';
 		else c = str[i];
 
-		shared_ptr<Node> node;
+		std::shared_ptr<Node> node;
 		if (!parent->find(c, node)) return false;
 
 		if (c != '\0')
