@@ -19,12 +19,23 @@ void add_characters_to_trie(const std::string& characters_string, MyTrie& in_out
     for (auto right = characters_string.cbegin(); right != characters_string.cend(); ++right)
     {
         char c = (char)*right;
-        if (c == ' ') continue;
+
         if (c != ',') continue;
-        std::string word = std::string(left, right);
+
+        //trim end
+        auto end = right;
+        while ((char)*(--end) == ' ') {}
+        ++end;
+
+        //add word
+        std::string word = std::string(left, end);
         in_out_trie.add_word(word);
+
+        //start new word
         left = right;
-        left++;
+        ++left;
+        //trim start
+        while ((char)*left == ' ') { ++left; }
     }
 }
 

@@ -66,8 +66,8 @@ internal class MyQuadTreeTests
         for (var i = 0; i < 100; i++)
         {
             var randomString = Guid.NewGuid().ToString();
-            var x = Random.Shared.NextDouble() * 200 - 100;
-            var y = Random.Shared.NextDouble() * 200 - 100;
+            var x = Random.Shared.NextDouble() * 24 - 12;
+            var y = Random.Shared.NextDouble() * 24 - 12;
             var point = new TestPoint(x, y, randomString);
             quadTree.Add(point);
         }
@@ -141,8 +141,8 @@ internal class MyQuadTreeTests
         quadTree.Add(x10y1);
         quadTree.Add(x5y5);
 
-        var found = quadTree.FindRange(1, 1, 1);
-        Assert.That(found, Is.EquivalentTo(new[] { x1y1 , x1y1_99, x2y2 }));
+        var found = quadTree.FindRange(1, 1, 1).ToArray();
+        Assert.That(found, Is.EquivalentTo(new[] { x1y1 , x1y1_99 }));
     }
 
     [Test]
