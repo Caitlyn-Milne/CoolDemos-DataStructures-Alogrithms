@@ -54,6 +54,14 @@ internal class TestPoint : IPoint
     }
 
     public static bool operator !=(TestPoint a, TestPoint b) => !(a == b);
+
+    public static TestPoint CreateRandom()
+    {
+        var randomString = Guid.NewGuid().ToString();
+        var x = Random.Shared.NextDouble() * 24 - 12;
+        var y = Random.Shared.NextDouble() * 24 - 12;
+        return new TestPoint(x, y, randomString);
+    }
 }
 
 internal class MyQuadTreeTests
@@ -65,10 +73,7 @@ internal class MyQuadTreeTests
         var quadTree = new MyQuadTree<TestPoint>();
         for (var i = 0; i < 100; i++)
         {
-            var randomString = Guid.NewGuid().ToString();
-            var x = Random.Shared.NextDouble() * 24 - 12;
-            var y = Random.Shared.NextDouble() * 24 - 12;
-            var point = new TestPoint(x, y, randomString);
+            var point = TestPoint.CreateRandom();
             quadTree.Add(point);
         }
     }
@@ -177,21 +182,54 @@ internal class MyQuadTreeTests
         var points = new List<TestPoint>();
         for (var i = 0; i < numPoints; i++)
         {
-            var randomString = Guid.NewGuid().ToString();
-            var x = Random.Shared.NextDouble() * 200 - 100;
-            var y = Random.Shared.NextDouble() * 200 - 100;
-            var point = new TestPoint(x, y, randomString);
+            var point = TestPoint.CreateRandom();
             quadTree.Add(point);
             points.Add(point);
         }
-        foreach (var point in points)
-        {
-            point.WasChecked = false;
-        }
 
+        foreach (var point in points)        
+            point.WasChecked = false;
+        
         quadTree.FindNearest(5,5);
         var pointsChecked = points.Count(p => p.WasChecked);
         Assert.That(pointsChecked, Is.LessThanOrEqualTo(maxAllowed));
+    }
+
+    [Test]
+    [TestCase(5)]
+    [TestCase(100)]
+    [TestCase(1000)]
+    [TestCase(10000)]
+    [TestCase(100000)]
+    [Parallelizable(ParallelScope.Self)]
+    public void WhenFindingRange_ShouldNotCheckMostPoints(int numPoints)
+    {
+        const double range = 1;
+        // Before: Create Random Quad Tree
+        var quadTree = new MyQuadTree<TestPoint>();
+        var points = new List<TestPoint>();
+        for (var i = 0; i < numPoints; i++)
+        {
+            var point = TestPoint.CreateRandom();
+            quadTree.Add(point);
+            points.Add(point);
+        }
+
+        // Before: Create Expected Outcome
+        var firstPoint = points[0];
+        var expectedPointsInRange = points.Where(p => p.Distance(firstPoint) < range).ToArray();
+        var maxAllowedChecks = (expectedPointsInRange.Length * 2) + (MathF.Log2(numPoints) * 2) + 10; // Allowed number of checks can be changed based on your nonfunctional requirements
+
+        foreach (var point in points)
+            point.WasChecked = false;
+
+        // Run Test
+        var actualPointsInRange = quadTree.FindRange(firstPoint.X, firstPoint.Y, range).ToArray();
+        var pointsChecked = points.Count(p => p.WasChecked);
+
+        // Assert
+        Assert.That(actualPointsInRange, Is.EquivalentTo(expectedPointsInRange));
+        Assert.That(pointsChecked, Is.LessThanOrEqualTo(maxAllowedChecks));
     }
     #endregion
 
