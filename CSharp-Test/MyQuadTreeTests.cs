@@ -175,9 +175,11 @@ internal class MyQuadTreeTests
     [TestCase(100, 30)]
     [TestCase(1000, 40)]
     [TestCase(10000, 50)]
+    [TestCase(100000, 60)]
     [Parallelizable(ParallelScope.Self)]
     public void WhenFindingNearest_ShouldNotCheckMostPoints(int numPoints,int maxAllowed)
     {
+        // Before: Create Random Quad Tree
         var quadTree = new MyQuadTree<TestPoint>();
         var points = new List<TestPoint>();
         for (var i = 0; i < numPoints; i++)
@@ -187,12 +189,19 @@ internal class MyQuadTreeTests
             points.Add(point);
         }
 
+        // Before: Create Expected Outcome
+        var expectedNearestPoint = points.MinBy(p => p.Distance(5, 5));
+
         foreach (var point in points)        
             point.WasChecked = false;
-        
-        quadTree.FindNearest(5,5);
+
+        // Run Test
+        var actualNearestPoint = quadTree.FindNearest(5,5);
+
+        // Assert
         var pointsChecked = points.Count(p => p.WasChecked);
         Assert.That(pointsChecked, Is.LessThanOrEqualTo(maxAllowed));
+        Assert.That(actualNearestPoint, Is.EqualTo(expectedNearestPoint));
     }
 
     [Test]
@@ -225,9 +234,10 @@ internal class MyQuadTreeTests
 
         // Run Test
         var actualPointsInRange = quadTree.FindRange(firstPoint.X, firstPoint.Y, range).ToArray();
-        var pointsChecked = points.Count(p => p.WasChecked);
+
 
         // Assert
+        var pointsChecked = points.Count(p => p.WasChecked);
         Assert.That(actualPointsInRange, Is.EquivalentTo(expectedPointsInRange));
         Assert.That(pointsChecked, Is.LessThanOrEqualTo(maxAllowedChecks));
     }

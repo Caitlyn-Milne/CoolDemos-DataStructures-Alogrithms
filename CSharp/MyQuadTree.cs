@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DataStructures;
-
 public static class PointHelpers
 {
     public static double Distance(double x1, double y1, double x2, double y2)
@@ -85,7 +84,10 @@ public class MyQuadTree<T> : IQuadTree<T> where T : IPoint
 
     public T? FindNearest(double x, double y)
     {
-        throw new NotImplementedException();
+        T? result = default;
+        var distance = double.MaxValue;
+        _root.FindNearest(x, y, ref result, ref distance);
+        return result;
     }
 
     public IEnumerable<T> FindRange(double x, double y, double exclusiveRange)
@@ -236,6 +238,42 @@ internal class MyQuad<T> where T : IPoint
                 yield return childResult;
             }
         }
+    }
+
+    public void FindNearest(double x, double y, ref T? nearest, ref double nearestDistance)
+    {
+        if (_children.Length == 0)
+        {
+            nearest ??= default;
+            foreach(var point in _points)
+            {
+                var distance = point.Distance(x, y);
+                if (distance < nearestDistance)
+                {
+                    nearest = point;
+                    nearestDistance = distance;
+                }
+            }
+            return;
+        }
+
+        foreach (var child in _children)
+        {
+            if (child.Bounds.Contains(x, y))
+            {
+                child.FindNearest(x, y, ref nearest, ref nearestDistance);
+                break;
+            } 
+        }
+
+        foreach (var child in _children)
+        {
+            (double x, double y) closestPoint = child.Bounds.ClosestPoint(x, x);
+            if (PointHelpers.Distance(closestPoint.x, closestPoint.y, x, y) < nearestDistance)       
+                child.FindNearest(x, y, ref nearest, ref nearestDistance);         
+        }
+
+        nearest ??= default;
     }
 
     public override string ToString()
