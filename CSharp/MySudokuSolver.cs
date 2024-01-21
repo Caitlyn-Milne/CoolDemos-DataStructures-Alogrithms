@@ -34,9 +34,6 @@ public class MySudokuSolverWaveFunctionCollapseNoAlloc : ISudokuSolver
             }
         }
 
-        var pr = int.MaxValue;
-        var pc = int.MaxValue;
-
         if (!Solve()) return false;
 
         // Convert bit index back to value
@@ -52,13 +49,10 @@ public class MySudokuSolverWaveFunctionCollapseNoAlloc : ISudokuSolver
 
         bool Solve()
         {
-            Console.WriteLine(MultidimensionalArrayToString(board, pr, pc));
             if (!LowestEntropyCel(board, out int r, out int c)) 
                 return true;
 
-            pr = r;
-            pc = c;
-            var neighbors = Neighbors(r, c).ToArray();
+            var neighbors = Neighbors(r, c);
 
             var originalValue = board[r, c];
             var bitMasks = EachBit(UnsetBits(board[r, c], UncollapsedMask));
@@ -147,7 +141,7 @@ public class MySudokuSolverWaveFunctionCollapseNoAlloc : ISudokuSolver
         return minEntropy != int.MaxValue;
     }
 
-    // Will return dups
+    // Will return dupes
     private IEnumerable<(int,int)> Neighbors(int r, int c)
     {
         for (var rr = 0; rr < 9; ++rr)
@@ -188,64 +182,5 @@ public class MySudokuSolverWaveFunctionCollapseNoAlloc : ISudokuSolver
         // TODO row col and square validation
 
         return true;
-    }
-
-    //public string MultidimensionalArrayToString(int[,] board, int pr, int pc)
-    //{
-    //    var sb = new StringBuilder();
-    //    for (var r = 0; r < board.GetLength(0); ++r)
-    //    {
-    //        for (var c = 0; c < board.GetLength(1); ++c)
-    //        {
-    //            //var length = sb.Length;
-    //            if (pr == r && pc == c) 
-    //                sb.Append("!!! ");
-    //            
-    //            if(HighestSetBitIndex(board[r, c]) == 10)
-    //            {
-    //                if (pr != r || pc != c)                 
-    //                    sb.Append('?');                    
-    //
-    //                var bits = EachBit(board[r, c]);
-    //                foreach(var bit in bits)
-    //                {
-    //                    if (bit == UncollapsedMask) continue;
-    //                    sb.Append(HighestSetBitIndex(bit));
-    //                    sb.Append(',');
-    //                }
-    //                sb.Length--;
-    //            }
-    //            else
-    //            {
-    //                sb.Append(HighestSetBitIndex(board[r, c]));
-    //            }
-    //            //for(var i = sb.Length; i < length + 5; ++i)
-    //            //{
-    //            //    sb.Append(' ');
-    //            //}
-    //            if (pr == r && pc == c)
-    //                sb.Append(" !!!");
-    //            sb.Append(" | ");
-    //        }
-    //        sb.Length -= 3;
-    //        sb.Append("\n");
-    //    }
-    //    return sb.ToString();
-    //}
-
-    public string MultidimensionalArrayToString(int[,] board, int _, int __)
-    {
-        var sb = new StringBuilder();
-        for (var r = 0; r < board.GetLength(0); ++r)
-        {
-            for (var c = 0; c < board.GetLength(1); ++c)
-            {
-                sb.Append(board[r, c]);
-                sb.Append(",");
-            }
-            sb.Length--;
-            sb.Append("\n");
-        }
-        return sb.ToString();
     }
 }
